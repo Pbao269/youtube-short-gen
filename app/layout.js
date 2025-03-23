@@ -1,6 +1,7 @@
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "./theme-provider";
+import ConvexClientProvider from "./ConvexClientProvider";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -13,9 +14,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={outfit.className}>
-        <ThemeProvider>
+        <ConvexClientProvider>
           {children}
-        </ThemeProvider>
+        </ConvexClientProvider>
       </body>
     </html>
   );
