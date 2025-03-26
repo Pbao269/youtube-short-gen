@@ -12,10 +12,11 @@ import {
     SidebarMenuItem,
   } from "@/components/ui/sidebar"
 import Image from 'next/image'
-import { HomeIcon, LucideFileVideo, Search, WalletCards } from 'lucide-react'
+import { Gem, HomeIcon, LucideFileVideo, Search, WalletCards } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useAuthContext } from '@/app/theme-provider'
 
 const MenuItems = [
   {
@@ -24,7 +25,7 @@ const MenuItems = [
     icon:HomeIcon
   },
   {
-    title: 'Create New Video',
+    title: 'Create',
     url: '/create-new-video',
     icon: LucideFileVideo
   },
@@ -39,8 +40,18 @@ const MenuItems = [
     icon: WalletCards
   }
 ]
+/**
+ * AppSidebar is a component that displays a sidebar that contains all the
+ * features of the app. It displays a button to create a new video, a menu
+ * with the following items: "Home", "Create New Video", "Explore", and
+ * "Billing". The sidebar also displays the user's credits and a button to
+ * purchase more credits.
+ *
+ * @returns A JSX element representing the AppSidebar component.
+ */
 function AppSidebar() {
   const path = usePathname();
+  const { dbUser:user } = useAuthContext();
   return (
     <Sidebar>
     <SidebarHeader>
@@ -53,7 +64,9 @@ function AppSidebar() {
       <SidebarGroup>
         <SidebarGroupContent>
           <div className='my-8 mx-6'>
-            <Button className='w-full'>+  Create New Video</Button>
+            <Link href="/create-new-video">
+              <Button className='w-full'>+  Create New Video</Button>
+            </Link>
           </div>
           <SidebarMenu>
             {MenuItems.map((item, index) => (
@@ -71,7 +84,15 @@ function AppSidebar() {
       </SidebarGroup>
       <SidebarGroup />
     </SidebarContent>
-    <SidebarFooter />
+    <SidebarFooter>
+      <div className="p-5 border rounded-lg mb-6 dark:bg-secondary bg-background">
+        <div className='flex items-center justify-between'>
+          <Gem />
+          <h2>{user?.credits} Credits Left</h2>
+        </div>
+        <Button className='w-full mt-4'>More Credits</Button>
+      </div>
+    </SidebarFooter>
   </Sidebar>
   )
 }

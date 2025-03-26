@@ -8,7 +8,7 @@ import { useAuthContext } from '../theme-provider'
 import Link from 'next/link'
 
 function Header() {
-    const { user } = useAuthContext();
+    const { authUser: user } = useAuthContext();
     return (
         <div className='p-4 flex items-center justify-between'>
             {/* Logo & Title */}
@@ -29,7 +29,7 @@ function Header() {
                     <Link href="/dashboard">
                     <Button>Dashboard</Button>
                     </Link>
-                    <Image src={user?.photoURL} alt="User" width={40} height={40} className='rounded-full'/>
+                    { user?.photoURL && <Image src={user?.photoURL} alt="User" width={40} height={40} className='rounded-full'/>}
                     </div>
                 }
             </div>

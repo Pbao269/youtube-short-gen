@@ -6,7 +6,7 @@ import Image from 'next/image';
 import ThemeToggle from '@/components/ui/themeToggle';
 
 function AppHeader() {
-    const { user } = useAuthContext();
+    const { authUser } = useAuthContext();
 
     return (
         <div className="flex justify-between items-center p-4 w-full">
@@ -14,11 +14,11 @@ function AppHeader() {
             <SidebarTrigger />
 
             {/* Right Side: Theme Toggle and User Photo */}
-            {user?.photoURL && (
+            {authUser?.photoURL && (
                 <div className="flex items-center gap-4">
                     <ThemeToggle />
                     <Image
-                        src={user?.photoURL}
+                        src={authUser?.photoURL}
                         alt="User"
                         width={30}
                         height={30}

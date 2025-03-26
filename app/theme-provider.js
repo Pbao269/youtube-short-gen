@@ -9,26 +9,31 @@ import { api } from '../convex/_generated/api'
 
 function ThemeProvider({ children }) {
 
-    const [user, setUser] = useState();
-    const CreateUser = useMutation(api.users.CreateNewUser);
+    const [authUser, setAuthUser] = useState(null)
+    const [dbUser, setDbUser] = useState(null)
+    const CreateUser = useMutation(api.users.CreateNewUser)
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            console.log(user);
-            setUser(user);
-
-            const result = await CreateUser({
+        if (user) {
+            const dbUserResult = await CreateUser({
                 name: user?.displayName,
                 email: user?.email,
                 pictureURL: user?.photoURL
-            });
-            console.log(result);
+            })
+            console.log(dbUserResult)
+            setAuthUser(user)
+            setDbUser(dbUserResult)
+        }
         })
-        return () => unsubscribe();
+
+        return () => unsubscribe()
     }, [])
+
     
   return (
     <div>
-        <AuthContext.Provider value={{user}}>
+        <AuthContext.Provider value={{authUser, dbUser}}>
             <NextThemesProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
                 {children}
             </NextThemesProvider>
