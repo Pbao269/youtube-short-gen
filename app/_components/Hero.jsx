@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import Authentication from './Authentication'
 
 function Hero() {
-    const { user } = useAuthContext();
+    const { authUser: user } = useAuthContext();
   return (
     <div className='py-12 flex flex-col gap-4 items-center
      justify-center my-12 md:px-16 lg:px-24 xl:px-32'>

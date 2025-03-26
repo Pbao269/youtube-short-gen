@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { SparklesIcon } from 'lucide-react'
+import axios from 'axios'
 
 const suggestions = [
     'Kid Story',
@@ -26,9 +27,13 @@ const suggestions = [
 function Topic({onHandleInputChange}) {
     const [selectTopic, setSelectTopic] = useState();
 
-    const GenerateScripts = () => {
-        console.log('Generate Scripts')
+    const GenerateScript = async () => {
+        const result = await axios.post('/api/generate-script', {
+            topic: selectTopic
+        });
+        console.log(result.data);
     }
+
   return (
     <div>
         <h2 className='mb-2'>Video Title</h2>
@@ -65,7 +70,7 @@ function Topic({onHandleInputChange}) {
 
 
         </div>
-        <Button className='mt-5' onClick={GenerateScripts}> <SparklesIcon/> Generate Scripts</Button>
+        <Button className='mt-5' onClick={GenerateScript}> <SparklesIcon/> Generate Scripts</Button>
     </div>
   )
 }
