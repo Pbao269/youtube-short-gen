@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { SparklesIcon } from 'lucide-react'
+import { Loader2Icon, SparklesIcon } from 'lucide-react'
 import axios from 'axios'
 
 const suggestions = [
@@ -26,12 +26,21 @@ const suggestions = [
   ]
 function Topic({onHandleInputChange}) {
     const [selectTopic, setSelectTopic] = useState();
+    const [scripts, setScripts] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const GenerateScript = async () => {
+        setLoading(true);
+        try {
         const result = await axios.post('/api/generate-script', {
             topic: selectTopic
         });
         console.log(result.data);
+        setScripts(result.data?.scripts);
+        } catch (error) {
+            console.log(error);
+        }
+        setLoading(false);
     }
 
   return (
@@ -67,10 +76,18 @@ function Topic({onHandleInputChange}) {
                     </div>
                 </TabsContent>
             </Tabs>
-
+        
+        {scripts.length > 0 && <div className='mt-5 grid grid-cols-2 gap-3'>
+            {scripts.map((script, index) => (
+                <div key={index}>
+                    <p className='text-sm text-muted-foreground line-clamp-4'>{script.content}</p>
+                </div>
+            ))}
+        </div>}
 
         </div>
-        <Button className='mt-5' onClick={GenerateScript}> <SparklesIcon/> Generate Scripts</Button>
+        <Button className='mt-5' onClick={GenerateScript} disabled={!selectTopic || loading}>
+            {loading? <Loader2Icon className='animate-spin mr-2'/> : <SparklesIcon/>} Generate Scripts</Button>
     </div>
   )
 }
